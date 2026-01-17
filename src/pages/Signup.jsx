@@ -7,6 +7,7 @@ export default function Signup() {
   const [formData, setFormData] = useState({ first_name: '', last_name: '', email: '', pin: '' })
   const [errors, setErrors] = useState({})
   const [isLoading, setIsLoading] = useState(false)
+  const [signupError, setSignupError] = useState(null)
   const navigate = useNavigate()
   const { addNotification } = useNotifications()
 
