@@ -129,6 +129,7 @@ export default function Signup() {
               type="password"
               value={formData.pin}
               onChange={handleChange}
+              autoComplete="current-password"
               className={`w-full px-4 py-3 bg-white/10 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-700 transition-colors ${
                 errors.pin ? 'border-red-500' : 'border-white/20'
               }`}
