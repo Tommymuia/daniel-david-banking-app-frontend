@@ -25,15 +25,22 @@ export default function Login() {
     if (Object.keys(newErrors).length === 0) {
       setIsLoading(true)
       try {
+        // Clear any existing tokens first
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        
         const response = await authService.login(formData)
         const { access_token } = response
         localStorage.setItem('token', access_token)
+        
         // Fetch user profile
         const userResponse = await userService.getProfile()
         login(userResponse)
         navigate('/dashboard')
       } catch (error) {
-        setErrors({ general: error.response?.data?.detail || error.response?.data?.message || 'Login failed. Please try again.' })
+        console.error('Login error:', error)
+        console.error('Error response:', error.response)
+        setErrors({ general: error.response?.data?.detail || error.message || 'Login failed. Please check your credentials.' })
       } finally {
         setIsLoading(false)
       }
