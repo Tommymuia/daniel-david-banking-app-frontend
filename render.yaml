@@ -1,9 +1,16 @@
 services:
-  - type: web
+  - type: static
     name: banking-app-frontend
     env: static
-    buildCommand: npm run build
-    staticPublishPath: dist
+    # Added npm install so the build doesn't fail
+    buildCommand: "npm install && npm run build" 
+    # Corrected the key name
+    publishPath: "dist" 
     envVars:
       - key: VITE_API_URL
-        value: https://banking-app-2-eyu9.onrender.com
+        value: "https://banking-app-1-8xh6.onrender.com/api"
+    # Added the rewrite so refresh doesn't cause 404s
+    routes:
+      - type: rewrite
+        source: "/*"
+        destination: "/index.html"

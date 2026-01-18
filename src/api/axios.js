@@ -1,31 +1,15 @@
 import axios from "axios";
 
-// ================================
-// 1️⃣ Ensure API URL is injected
-// ================================
-const API_BASE = import.meta.env.VITE_API_URL;
+// Uses Render variable in production, localhost for development
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:10000/api";
 
-if (!API_BASE) {
-  throw new Error(
-    "VITE_API_URL is not defined! Check your Vercel environment variables and redeploy."
-  );
-}
-
-console.log("Using API URL:", API_BASE); // Optional: confirm URL on page load
-
-// ================================
-// 2️⃣ Create Axios instance
-// ================================
 const api = axios.create({
-  baseURL: API_BASE, // must include /api in VITE_API_URL
+  baseURL: API_BASE,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// ================================
-// 3️⃣ Add token automatically if exists
-// ================================
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -37,24 +21,16 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// ================================
-// 4️⃣ Handle 401 globally
-// ================================
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Clear local storage
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-      // Redirect to login page
       window.location.href = "/login";
     }
     return Promise.reject(error);
   }
 );
 
-// ================================
-// 5️⃣ Export Axios instance
-// ================================
 export default api;
